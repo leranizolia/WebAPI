@@ -1,3 +1,7 @@
 ﻿{
+  "ConnectionStrings":
+  {
+    "DefaultConnection": "Server=localhost;user=root; Database=Shop"
+  }
 
 }

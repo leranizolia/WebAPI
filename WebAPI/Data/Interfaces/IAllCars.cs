@@ -8,7 +8,7 @@ namespace WebAPI.Data.Interfaces
     {
         IEnumerable<Car> GetCars { get; }
 
-        IEnumerable<Car> GetFavCars { get; set; }
+        IEnumerable<Car> GetFavCars { get; }
 
         Car GetCar(int CarId);
 

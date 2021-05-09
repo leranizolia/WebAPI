@@ -13,7 +13,7 @@ namespace WebAPI.Data.Models
 
         public string Img { get; set; }
 
-        public ushort Price { get; set; }
+        public decimal Price { get; set; }
 
         public bool IsFavourite { get; set; }
 

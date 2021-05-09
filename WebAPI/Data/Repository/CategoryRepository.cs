@@ -1,10 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using WebAPI.Data.Interfaces;
+using WebAPI.Data.Models;
+
 namespace WebAPI.Data.Repository
 {
-    public class CategoryRepository
+    public class CategoryRepository : ICarsCategory
     {
-        public CategoryRepository()
+        private readonly AppDBContent AppDBContent;
+
+        public CategoryRepository(AppDBContent AppDBContent)
         {
+            this.AppDBContent = AppDBContent;
         }
+        public IEnumerable<Category> AllCategories => AppDBContent.Category;
     }
+
 }
+

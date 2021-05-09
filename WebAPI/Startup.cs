@@ -11,16 +11,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebAPI.Data;
 using WebAPI.Data.Interfaces;
 using WebAPI.Data.Mocks;
+using Microsoft.EntityFrameworkCore;
+using WebAPI.Data.Repository;
 
 namespace WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IConfigurationRoot ConfString;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostEnv)
         {
             Configuration = configuration;
+
+            ConfString = new ConfigurationBuilder().SetBasePath(hostEnv.ContentRootPath).AddJsonFile("dbsettings.json").Build();
+
         }
 
         public IConfiguration Configuration { get; }
@@ -28,14 +36,18 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDBContent>(options =>
+            {
+                options.UseMySQL(ConfString.GetConnectionString("DefaultConnection"));
+            });
             services.AddRazorPages();
             services.AddMvc(option =>
             {
                 option.EnableEndpointRouting = false;
             });
             //позволяет соединить интерфейсы с моками
-            services.AddTransient<IAllCars, MockCars>();
-            services.AddTransient<ICarsCategory, MockCategory>();
+            services.AddTransient<IAllCars, CarRepository>();
+            services.AddTransient<ICarsCategory, CategoryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +57,12 @@ namespace WebAPI
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                AppDBContent content = scope.ServiceProvider.GetRequiredService<AppDBContent>();
+                DBObjects.Initial(content);
+            }
         }
     }
 }
