@@ -16,6 +16,7 @@ using WebAPI.Data.Interfaces;
 using WebAPI.Data.Mocks;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data.Repository;
+using WebAPI.Data.Models;
 
 namespace WebAPI
 {
@@ -41,6 +42,11 @@ namespace WebAPI
                 options.UseMySQL(ConfString.GetConnectionString("DefaultConnection"));
             });
             services.AddRazorPages();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddScoped(sp => ShopCar.GetCar(sp));
+
             services.AddMvc(option =>
             {
                 option.EnableEndpointRouting = false;
@@ -48,6 +54,9 @@ namespace WebAPI
             //позволяет соединить интерфейсы с моками
             services.AddTransient<IAllCars, CarRepository>();
             services.AddTransient<ICarsCategory, CategoryRepository>();
+
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +65,7 @@ namespace WebAPI
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseMvcWithDefaultRoute();
 
             using (var scope = app.ApplicationServices.CreateScope())

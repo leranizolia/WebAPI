@@ -12,9 +12,5 @@ namespace WebAPI.Data.Models
         public string Desc { get; set; }
 
         public List<Car> Cars { get; set; }
-
-        public Category()
-        {
-        }
     }
 }
