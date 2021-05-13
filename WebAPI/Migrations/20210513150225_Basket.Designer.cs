@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Data;
 
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(AppDBContent))]
-    partial class AppDBContentModelSnapshot : ModelSnapshot
+    [Migration("20210513150225_Basket")]
+    partial class Basket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,16 +73,6 @@ namespace WebAPI.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("WebAPI.Data.Models.ShopCar", b =>
-                {
-                    b.Property<string>("ShopCarId")
-                        .HasColumnType("varchar(767)");
-
-                    b.HasKey("ShopCarId");
-
-                    b.ToTable("ShopCar");
-                });
-
             modelBuilder.Entity("WebAPI.Data.Models.ShopCarItem", b =>
                 {
                     b.Property<int>("Id")
@@ -94,13 +86,11 @@ namespace WebAPI.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ShopCarId")
-                        .HasColumnType("varchar(767)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
-
-                    b.HasIndex("ShopCarId");
 
                     b.ToTable("ShopCarItem");
                 });
@@ -119,10 +109,6 @@ namespace WebAPI.Migrations
                     b.HasOne("WebAPI.Data.Models.Car", "Car")
                         .WithMany()
                         .HasForeignKey("CarId");
-
-                    b.HasOne("WebAPI.Data.Models.ShopCar", null)
-                        .WithMany("ListShopItems")
-                        .HasForeignKey("ShopCarId");
                 });
 #pragma warning restore 612, 618
         }

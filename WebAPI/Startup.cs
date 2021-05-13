@@ -39,7 +39,11 @@ namespace WebAPI
         {
             services.AddDbContext<AppDBContent>(options =>
             {
-                options.UseMySQL(ConfString.GetConnectionString("DefaultConnection"));
+                options.UseMySQL(ConfString.GetConnectionString("DefaultConnection"),
+                    MySQLOptionsAction: options =>
+                    {
+                        options.CommandTimeout(200);
+                    });
             });
             services.AddRazorPages();
 
@@ -49,7 +53,7 @@ namespace WebAPI
 
             services.AddMvc(option =>
             {
-                option.EnableEndpointRouting = false;
+                option.EnableEndpointRouting = true;
             });
             //позволяет соединить интерфейсы с моками
             services.AddTransient<IAllCars, CarRepository>();
@@ -62,11 +66,18 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSession();
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();
-            app.UseSession();
-            app.UseMvcWithDefaultRoute();
+            //app.UseMvcWithDefaultRoute();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
 
             using (var scope = app.ApplicationServices.CreateScope())
             {

@@ -37,7 +37,7 @@ namespace WebAPI.Data.Models
             return new ShopCar(context) { ShopCarId = ShopCarId };
         }
 
-        public void AddToCar(Car car, int amount)
+        public void AddToCar(Car car)
         {
             AppDBContent.ShopCarItem.Add(new ShopCarItem
             {

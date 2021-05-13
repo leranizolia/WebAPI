@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Data.Interfaces;
 using WebAPI.Data.Models;
 using WebAPI.Data.Repository;
 using WebAPI.ViewModels;
@@ -9,11 +10,11 @@ namespace WebAPI.Controllers
 {
     public class ShopCarController : Controller
     {
-        private readonly CarRepository CarRep;
+        private readonly IAllCars CarRep;
 
         private readonly ShopCar ShopCar;
 
-        public ShopCarController(CarRepository carRep, ShopCar shopCar)
+        public ShopCarController(IAllCars carRep, ShopCar shopCar)
         {
             ShopCar = shopCar;
             CarRep = carRep;
@@ -40,8 +41,9 @@ namespace WebAPI.Controllers
             var item = CarRep.GetCars.FirstOrDefault(i => i.Id == id);
             if (item != null)
             {
-                ShopCar.AddToCar
+                ShopCar.AddToCar(item);
             }
+            return RedirectToAction("Index","ShopCar");
         }
     }
 }

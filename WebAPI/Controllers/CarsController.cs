@@ -28,10 +28,12 @@ namespace WebAPI.Controllers
         public ViewResult List()
         {
             ViewBag.Title = "Страница с автомобилями";
-            CarsListViewModel obj = new CarsListViewModel();
-            obj.GetAllCars = AllCars.GetCars;
+            CarsListViewModel obj = new CarsListViewModel
+            {
+                GetAllCars = AllCars.GetCars,
 
-            obj.CurrCategory = "Автомобили";
+                CurrCategory = "Автомобили"
+            };
 
             return View(obj);
         }

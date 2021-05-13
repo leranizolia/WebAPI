@@ -33,6 +33,8 @@
     <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="Data\Repository\" />
+    <Folder Include="Views\ShopCar\" />
+    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Cars\List.cshtml" />
