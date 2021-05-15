@@ -71,14 +71,57 @@ namespace WebAPI.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("WebAPI.Data.Models.ShopCar", b =>
+            modelBuilder.Entity("WebAPI.Data.Models.Order", b =>
                 {
-                    b.Property<string>("ShopCarId")
-                        .HasColumnType("varchar(767)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasKey("ShopCarId");
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
 
-                    b.ToTable("ShopCar");
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("WebAPI.Data.Models.OrderDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("WebAPI.Data.Models.ShopCarItem", b =>
@@ -94,13 +137,11 @@ namespace WebAPI.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ShopCarId")
-                        .HasColumnType("varchar(767)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
-
-                    b.HasIndex("ShopCarId");
 
                     b.ToTable("ShopCarItem");
                 });
@@ -114,15 +155,26 @@ namespace WebAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebAPI.Data.Models.OrderDetail", b =>
+                {
+                    b.HasOne("WebAPI.Data.Models.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebAPI.Data.Models.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("WebAPI.Data.Models.ShopCarItem", b =>
                 {
                     b.HasOne("WebAPI.Data.Models.Car", "Car")
                         .WithMany()
                         .HasForeignKey("CarId");
-
-                    b.HasOne("WebAPI.Data.Models.ShopCar", null)
-                        .WithMany("ListShopItems")
-                        .HasForeignKey("ShopCarId");
                 });
 #pragma warning restore 612, 618
         }

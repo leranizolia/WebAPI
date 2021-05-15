@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Data.Interfaces;
+using WebAPI.Data.Models;
 using WebAPI.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,18 +25,48 @@ namespace WebAPI.Controllers
             AllCategories = iCarsCategory;
         }
 
-        //ViewResult -> html страница
-        public ViewResult List()
-        {
-            ViewBag.Title = "Страница с автомобилями";
-            CarsListViewModel obj = new CarsListViewModel
-            {
-                GetAllCars = AllCars.GetCars,
 
-                CurrCategory = "Автомобили"
+        [Route("Cars/List")]
+        [Route("Cars/List/{category}")]
+        //ViewResult -> html страница
+        public ViewResult List(string category)
+
+        {
+            string _category = category;
+
+            IEnumerable<Car> cars = null;
+
+            string currcategory = "";
+
+            if (string.IsNullOrEmpty(category))
+            {
+                cars = AllCars.GetCars.OrderBy(i => i.Id);
+            }
+            else
+            {
+                //OrdinalIgnoreCase - это для того чтобы был нижний регистр
+                if (string.Equals("electro", category, StringComparison.OrdinalIgnoreCase))
+                {
+                    cars = AllCars.GetCars.Where(i => i.Category.CategoryName.Equals("Электромобили")).OrderBy(i => i.Id);
+                    currcategory = "Электромобили";
+                }
+                else if (string.Equals("fuel", category, StringComparison.OrdinalIgnoreCase))
+                {
+                    cars = AllCars.GetCars.Where(i => i.Category.CategoryName.Equals("Классические автомобили")).OrderBy(i => i.Id);
+                    currcategory = "Классические автомобили";
+                }
+
+            }
+
+            var CarObj = new CarsListViewModel
+            {
+                GetAllCars = cars,
+                CurrCategory = currcategory
             };
 
-            return View(obj);
+            ViewBag.Title = "Страница с автомобилями";
+
+            return View(CarObj);
         }
 
     }

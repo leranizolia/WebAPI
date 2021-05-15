@@ -58,6 +58,7 @@ namespace WebAPI
             //позволяет соединить интерфейсы с моками
             services.AddTransient<IAllCars, CarRepository>();
             services.AddTransient<ICarsCategory, CategoryRepository>();
+            services.AddTransient<IAllOrders, OrdersRepository>();
 
             services.AddMemoryCache();
             services.AddSession();
@@ -72,11 +73,16 @@ namespace WebAPI
             app.UseStaticFiles();
             //app.UseMvcWithDefaultRoute();
             app.UseRouting();
+            //? - означает, что id необязательный
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                         name: "default",
                         pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                        name: "categoryFilter",
+                        //category должно точно совпадать с тем, что мы передавали как параметр в классе
+                        pattern: "{controller=Car}/{action}/{category?}", defaults: new { Controller="Car", action="List"});
             });
 
             using (var scope = app.ApplicationServices.CreateScope())

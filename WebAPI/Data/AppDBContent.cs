@@ -17,8 +17,9 @@ namespace WebAPI.Data
 
         public DbSet<ShopCarItem> ShopCarItem { get; set; }
 
-        public DbSet<ShopCar> ShopCar { get; set; }
+        public DbSet<Order> Order { get; set; }
 
+        public DbSet<OrderDetail> OrderDetail { get; set; }
 
     }
 }

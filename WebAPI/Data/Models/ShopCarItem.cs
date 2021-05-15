@@ -5,7 +5,7 @@ namespace WebAPI.Data.Models
     {
         public int Id { get; set; }
 
-        public Car Car { get; set; }
+        public virtual Car Car { get; set; }
 
         public decimal Price { get; set; }
 
@@ -13,3 +13,4 @@ namespace WebAPI.Data.Models
 
     }
 }
+

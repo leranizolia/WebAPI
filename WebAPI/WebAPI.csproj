@@ -35,6 +35,7 @@
     <Folder Include="Data\Repository\" />
     <Folder Include="Views\ShopCar\" />
     <Folder Include="Views\Home\" />
+    <Folder Include="Views\Order\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Cars\List.cshtml" />

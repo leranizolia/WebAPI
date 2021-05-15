@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using WebAPI.Migrations;
 
 namespace WebAPI.Data.Models
 {
@@ -30,11 +29,11 @@ namespace WebAPI.Data.Models
 
             var context = services.GetService<AppDBContent>();
 
-            string ShopCarId = session.GetString("CarId") ?? Guid.NewGuid().ToString();
+            string shopCarId = session.GetString("CarId") ?? Guid.NewGuid().ToString();
 
-            session.SetString("CarId", ShopCarId);
+            session.SetString("CarId", shopCarId);
 
-            return new ShopCar(context) { ShopCarId = ShopCarId };
+            return new ShopCar(context) { ShopCarId = shopCarId };
         }
 
         public void AddToCar(Car car)
